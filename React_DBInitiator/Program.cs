@@ -1,18 +1,9 @@
-﻿
-using Dapper;
-using React_DBInitiator;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
+﻿using React_DBInitiator;
+using React_DBInitiator.Functions;
+ 
+TableCreation table = new TableCreation();
 
+await table.CreateTable("race", "RaceTableScript");
 
-DapperContext context = new DapperContext();
+//Before running the console application, make sure to create the initial database where the tables will be stored
 
-Console.WriteLine("");
-Console.WriteLine("Initiating creation of Data database....");
-
-Console.WriteLine("Creating Department Table....");
-
-//Insert creation method here
-
-Console.WriteLine("Database has been created successfully!!");
