@@ -10,17 +10,16 @@ service.TableInitiator("Race", defaultValues.raceColumns);
 service.TableInitiator("Department", defaultValues.departmentColumns);
 service.TableInitiator("Employee", defaultValues.employeeColumns);
 
-service.StoredProcedureInitiator("PaginateRaceResults", @"DECLARE @TotalResults int; 
-SELECT @TotalResults = COUNT(*) FROM Race WHERE (Description = @Description OR @Description IS NULL) AND (IsEnabled = @IsEnabled OR @IsEnabled IS NULL) 
-SELECT * FROM Race WHERE (Description = @Description OR @Description IS NULL) AND (IsEnabled = @IsEnabled OR @IsEnabled IS NULL)
-ORDER BY ID
-OFFSET @PageSize * (@PageNumber - 1) ROWS
-FETCH NEXT @PageSize ROWS ONLY;
-PRINT 'Total Results: ' + CAST(@TotalResults AS VARCHAR(10));
-", defaultValues.raceResultParams);
+service.StoredProcedureInitiator("PaginateRaceResults", @"SELECT @TotalResults = COUNT(*) FROM Race 
+	WHERE (Description = @Description OR @Description IS NULL) AND (IsEnabled = @IsEnabled OR @IsEnabled IS NULL) 
+	SELECT * FROM Race WHERE (Description = @Description OR @Description IS NULL) AND (IsEnabled = @IsEnabled OR @IsEnabled IS NULL)
+	ORDER BY ID
+	OFFSET @PageSize * (@PageNumber - 1) ROWS
+	FETCH NEXT @PageSize ROWS ONLY;
+	PRINT 'Total Results: ' + CAST(@TotalResults AS VARCHAR(10));", defaultValues.raceResultParams);
 
-service.StoredProcedureInitiator("PaginateDepartmentResults", @"DECLARE @TotalResults int;
-	SELECT @TotalResults = COUNT(*) FROM Department WHERE (Name = @Name OR @Name IS NULL)
+service.StoredProcedureInitiator("PaginateDepartmentResults", @"SELECT @TotalResults = COUNT(*) FROM Department 
+	WHERE (Name = @Name OR @Name IS NULL)
 	SELECT *
 	FROM Department
 	WHERE (Name = @Name OR @Name IS NULL)
@@ -29,9 +28,7 @@ service.StoredProcedureInitiator("PaginateDepartmentResults", @"DECLARE @TotalRe
 	FETCH NEXT @PageSize ROWS ONLY;
 	PRINT 'Total Results: ' + CAST(@TotalResults AS VARCHAR(10));", defaultValues.departemtResultParams);
 
-service.StoredProcedureInitiator("PaginateEmployeeResults", @"DECLARE @TotalResults int;
-	SELECT *
-	FROM Employee
+service.StoredProcedureInitiator("PaginateEmployeeResults", @"SELECT * FROM Employee
 	WHERE (Name = @Name OR @Name IS NULL) AND (Surname = @Surname OR @Surname IS NULL) AND 
 	(Email = @Email OR @Email IS NULL) AND (Cell = @Cell OR @Cell IS NULL)
 	AND (ID = @ID OR @ID IS NULL) AND (Gender = @Gender OR @Gender IS NULL) AND 

@@ -39,14 +39,16 @@ namespace React_DBInitiator
             new ParameterDefinition { Name = "PageSize", DataType = "INT" },
             new ParameterDefinition { Name = "PageNumber", DataType = "INT" },
             new ParameterDefinition { Name = "Description", DataType = "VARCHAR(255)" },
-            new ParameterDefinition { Name = "IsEnabled", DataType = "BIT" }
+            new ParameterDefinition { Name = "IsEnabled", DataType = "BIT" },
+            new ParameterDefinition { Name = "TotalResults", DataType = "INT OUTPUT" }
         };
 
         public List<ParameterDefinition> departemtResultParams = new()
         {
             new ParameterDefinition { Name = "PageSize", DataType = "INT" },
             new ParameterDefinition { Name = "PageNumber", DataType = "INT" },
-            new ParameterDefinition { Name = "Name", DataType = "VARCHAR(255)" }
+            new ParameterDefinition { Name = "Name", DataType = "VARCHAR(255)" },
+            new ParameterDefinition { Name = "TotalResults", DataType = "INT OUTPUT" }
         };
 
         public List<ParameterDefinition> employeeResultParams = new()
@@ -61,6 +63,7 @@ namespace React_DBInitiator
             new ParameterDefinition { Name = "Gender", DataType = "VARCHAR(255)" },
             new ParameterDefinition { Name = "RaceID", DataType = "INT" },
             new ParameterDefinition { Name = "IsSubscribed", DataType = "BIT" },
+            new ParameterDefinition { Name = "TotalResults", DataType = "INT OUTPUT" }
         };
 
         public List<ParameterDefinition> employeeParams = new()
