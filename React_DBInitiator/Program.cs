@@ -1,9 +1,48 @@
 ﻿using React_DBInitiator;
-using React_DBInitiator.Functions;
- 
-TableCreation table = new TableCreation();
 
-await table.CreateTable("race", "RaceTableScript");
+DefaultValues defaultValues = new DefaultValues();
 
-//Before running the console application, make sure to create the initial database where the tables will be stored
+DatabaseService service = new DatabaseService("ZAZN-UMH--A71C3\\SQLEXPRESS", "Data");
 
+service.DatabaseInitiator();
+service.TableInitiator("Race", defaultValues.raceColumns);
+service.TableInitiator("Department", defaultValues.departmentColumns);
+service.TableInitiator("Employee", defaultValues.employeeColumns);
+
+service.StoredProcedureInitiator("PaginateRaceResults", @"DECLARE @TotalResults int; 
+SELECT @TotalResults = COUNT(*) FROM Race WHERE (Description = @Description OR @Description IS NULL) AND (IsEnabled = @IsEnabled OR @IsEnabled IS NULL) 
+SELECT * FROM Race WHERE (Description = @Description OR @Description IS NULL) AND (IsEnabled = @IsEnabled OR @IsEnabled IS NULL)
+ORDER BY ID
+OFFSET @PageSize * (@PageNumber - 1) ROWS
+FETCH NEXT @PageSize ROWS ONLY;
+PRINT 'Total Results: ' + CAST(@TotalResults AS VARCHAR(10));
+", defaultValues.raceResultParams);
+
+service.StoredProcedureInitiator("PaginateDepartmentResults", @"DECLARE @TotalResults int;
+	SELECT @TotalResults = COUNT(*) FROM Department WHERE (Name = @Name OR @Name IS NULL)
+	SELECT *
+	FROM Department
+	WHERE (Name = @Name OR @Name IS NULL)
+	ORDER BY ID
+	OFFSET @PageSize * (@PageNumber - 1) ROWS
+	FETCH NEXT @PageSize ROWS ONLY;
+	PRINT 'Total Results: ' + CAST(@TotalResults AS VARCHAR(10));", defaultValues.departemtResultParams);
+
+service.StoredProcedureInitiator("PaginateEmployeeResults", @"DECLARE @TotalResults int;
+	SELECT *
+	FROM Employee
+	WHERE (Name = @Name OR @Name IS NULL) AND (Surname = @Surname OR @Surname IS NULL) AND 
+	(Email = @Email OR @Email IS NULL) AND (Cell = @Cell OR @Cell IS NULL)
+	AND (ID = @ID OR @ID IS NULL) AND (Gender = @Gender OR @Gender IS NULL) AND 
+	(RaceID = @RaceID OR @RaceID IS NULL) AND (IsSubscribed = @IsSubscribed OR @IsSubscribed IS NULL)
+	ORDER BY EmployeeID
+	OFFSET @PageSize * (@PageNumber - 1) ROWS
+	FETCH NEXT @PageSize ROWS ONLY;
+	PRINT 'Total Results: ' + CAST(@TotalResults AS VARCHAR(10));", defaultValues.employeeResultParams);
+
+service.StoredProcedureInitiator("UpdateEmployee", @"UPDATE Employee
+SET Name = @Name, Surname = @Surname, Email = @Email, Cell = @Cell, ID = @ID, Gender = @Gender, RaceID = @RaceID, IsSubscribed = @Subscribed
+WHERE EmployeeID = @EmployeeID", defaultValues.employeeParams);
+
+service.StoredProcedureInitiator("CreateEmployee", @"INSERT INTO Employee 
+VALUES(@EmployeeID, @Name, @Surname, @Email, @Cell, @ID, @Gender, @RaceID, @Subscribed)", defaultValues.employeeParams);
