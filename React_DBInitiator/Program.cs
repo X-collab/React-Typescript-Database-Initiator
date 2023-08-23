@@ -2,7 +2,8 @@
 
 DefaultValues defaultValues = new DefaultValues();
 
-DatabaseService service = new DatabaseService("ZAZN-UMH--A71C3\\SQLEXPRESS", "Data");
+//Starts off the service (Insert your server name in the "YourServerName")
+DatabaseService service = new DatabaseService("YourServerName", "Data");
 
 service.DatabaseInitiator();
 service.TableInitiator("Race", defaultValues.raceColumns);
